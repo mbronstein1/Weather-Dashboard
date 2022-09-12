@@ -1,0 +1,21 @@
+.gradient-bg-color {
+    background-image: linear-gradient(to right, blue, darkblue);
+}
+
+#submit-btn {
+    width: 100%;
+}
+
+#forecast-title {
+    margin: 10px;
+}
+
+.forecast-box {
+    background-color: darkblue;
+    margin: 10px;
+    color: white;
+}
+
+.is-5 {
+    color: white;
+}
