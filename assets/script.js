@@ -12,9 +12,9 @@ var forecastDisplay = $("#forecast-display");
 var buttonSection = $("#button-section");
 var storedCity = JSON.parse(localStorage.getItem("city")) || [];
 
-// if(storedCity.length > 10) {
-//     storedCity.shift();
-// }
+if(storedCity.length > 10) {
+    storedCity.shift();
+};
 
 submitBtn.on("click", function(e) {
     e.preventDefault();
