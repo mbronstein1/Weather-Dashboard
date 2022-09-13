@@ -3,6 +3,8 @@
 ## Description
 This is the sixth challenge in the Northwestern Coding Bootcamp (Module 6). We were required to create a weather dashboard that uses the Open Weather API. We had to fetch data from the API and present it on the page for the current time, as well as the 5-day forecast. In addition, we had to allow the user to click on previously searched cities to easily view those forecasts as well. I also added the "search history" to local storage so you can view this information if the user refreshed the page or left and returned at a later time.
 
+For this assignment, our instructor asked us to use the city url and display the data by api url. In addition, the UV index is not available in the free version, and the lat and lon values are not working either, so neither of those are present on the webpage.
+
 ## Link to live page
 [Live Link](https://mbronstein1.github.io/Weather-Dashboard-Challenge-6/)
 
