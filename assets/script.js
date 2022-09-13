@@ -16,34 +16,11 @@ submitBtn.on("click", function(e) {
     var cityInput = inputEl.val();
     var apiWeatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityInput + "&appid=7ca09bdacd044c4e45bfed7a72a9b8df&units=imperial";
     var apiForecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityInput + "&appid=7ca09bdacd044c4e45bfed7a72a9b8df&units=imperial"
-    fetch(apiWeatherUrl) //Fetch API data, convert to json and pass data object to dispayWeather function
-    .then(function(response1){
-        if(response1.ok) {
-            response1.json()
-            .then(function(data1) {
-                var saveBtn = $("<btn class='save-btn button submit-btn'>");
-                saveBtn.text(cityInput);
-                saveBtn.val(cityInput)
-                buttonSection.append(saveBtn);
-                displayWeather(data1);
-            })
-        } else {
-            alert("Error: Please submit valid city")
-        }
-    })
-    .catch(function(error) {
-        alert("Unable to connect to Open Weather")
-    });
-    fetch(apiForecastUrl)
-    .then(function(response2){
-        if(response2.ok) {
-            response2.json()
-            .then(function(data2) {
-                displayForecast(data2);
-            });
-        }
-    })
-
+    fetchApi(apiWeatherUrl, apiForecastUrl);
+    var saveBtn = $("<btn class='save-btn button submit-btn'>");
+    saveBtn.text(cityInput);
+    saveBtn.val(cityInput)
+    buttonSection.append(saveBtn);
     inputEl.val("");
 });
 
@@ -53,11 +30,16 @@ buttonSection.on("click", ".save-btn", function(e) {
     e.preventDefault();
     var apiWeatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + e.target.value + "&appid=7ca09bdacd044c4e45bfed7a72a9b8df&units=imperial";
     var apiForecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + e.target.value + "&appid=7ca09bdacd044c4e45bfed7a72a9b8df&units=imperial";
-    fetch(apiWeatherUrl)
+    fetchApi(apiWeatherUrl, apiForecastUrl);
+})
+
+function fetchApi(apiWeatherUrl, apiForecastUrl) {
+    fetch(apiWeatherUrl) //Fetch API data, convert to json and pass data object to dispayWeather function
     .then(function(response1){
         if(response1.ok) {
             response1.json()
             .then(function(data1) {
+
                 displayWeather(data1);
             })
         } else {
@@ -76,8 +58,7 @@ buttonSection.on("click", ".save-btn", function(e) {
             });
         }
     })
-
-})
+}
 
 function displayWeather(data1) {
     var iconUrl = `http://openweathermap.org/img/w/${data1.weather[0].icon}.png`;//Get icon url from api data
@@ -89,29 +70,6 @@ function displayWeather(data1) {
     humidityDisplay.text(`Humidity: ${data1.main.humidity}%`);
     weatherDisplay.attr("style", "border: 1px black solid; padding: 0px 10px 20px")
 }
-
-//Workshopped this function until it worked with ONE box and ONE array item
-// function displayForecast(data2) {
-//     var iconUrl = `http://openweathermap.org/img/w/${data2.list[4].weather[0].icon}.png`;
-//     var icon = $("<img src=" + iconUrl + ">");
-//     var box = $("<div class='column forecast-box is-one-fifth'>");
-//     var dateForecast = $("<div class='title is-5'>");
-//     var tempForecast = $("<div style='padding: 5px'>");
-//     var windForecast = $("<div style='padding: 5px'>");
-//     var humidForecast = $("<div style='padding: 5px'>");
-//     forecastTitle.text(`5-day Forecast:`)
-//     dateForecast.text(moment(data2.list[4].dt_txt).format('l'));
-//     tempForecast.text(`Temp: ${data2.list[4].main.temp}\u00B0F`);
-//     windForecast.text(`Wind: ${data2.list[4].wind.speed} MPH`);
-//     humidForecast.text(`Humidity: ${data2.list[4].main.humidity}%`);
-//     box.append(dateForecast);
-//     box.append(icon);
-//     box.append(tempForecast);
-//     box.append(windForecast);
-//     box.append(humidForecast);
-//     forecastDisplay.append(box);
-//     console.log(box);
-// }
 
 //Used above info and experimented with looping through every 8 numbers after 4 (getting the forecast for every day at Noon)
 function displayForecast(data2) {
@@ -139,3 +97,73 @@ function displayForecast(data2) {
         }
     }
 }
+
+
+// Original version of onClicks without fetchApi as a function
+// submitBtn.on("click", function(e) {
+//     e.preventDefault();
+//     var cityInput = inputEl.val();
+//     var apiWeatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityInput + "&appid=7ca09bdacd044c4e45bfed7a72a9b8df&units=imperial";
+//     var apiForecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityInput + "&appid=7ca09bdacd044c4e45bfed7a72a9b8df&units=imperial"
+//     fetch(apiWeatherUrl) //Fetch API data, convert to json and pass data object to dispayWeather function
+//     .then(function(response1){
+//         if(response1.ok) {
+//             response1.json()
+//             .then(function(data1) {
+
+//                 displayWeather(data1);
+//             })
+//         } else {
+//             alert("Error: Please submit valid city")
+//         }
+//     })
+//     .catch(function(error) {
+//         alert("Unable to connect to Open Weather")
+//     });
+//     fetch(apiForecastUrl)
+//     .then(function(response2){
+//         if(response2.ok) {
+//             response2.json()
+//             .then(function(data2) {
+//                 displayForecast(data2);
+//             });
+//         }
+//     })
+//     var saveBtn = $("<btn class='save-btn button submit-btn'>");
+//     saveBtn.text(cityInput);
+//     saveBtn.val(cityInput)
+//     buttonSection.append(saveBtn);
+//     inputEl.val("");
+// });
+
+
+// //Create button dynamically after submitBtn is submitted
+// buttonSection.on("click", ".save-btn", function(e) {
+//     e.preventDefault();
+//     var apiWeatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + e.target.value + "&appid=7ca09bdacd044c4e45bfed7a72a9b8df&units=imperial";
+//     var apiForecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + e.target.value + "&appid=7ca09bdacd044c4e45bfed7a72a9b8df&units=imperial";
+//     fetch(apiWeatherUrl)
+//     .then(function(response1){
+//         if(response1.ok) {
+//             response1.json()
+//             .then(function(data1) {
+//                 displayWeather(data1);
+//             })
+//         } else {
+//             alert("Error: Please submit valid city")
+//         }
+//     })
+//     .catch(function(error) {
+//         alert("Unable to connect to Open Weather")
+//     });
+//     fetch(apiForecastUrl)
+//     .then(function(response2){
+//         if(response2.ok) {
+//             response2.json()
+//             .then(function(data2) {
+//                 displayForecast(data2);
+//             });
+//         }
+//     })
+
+// })
