@@ -9,7 +9,12 @@ var uvDisplay = $("#uv-display")
 var todaysDate = (moment().format("M/D/YY"));
 var forecastTitle = $("#forecast-title");
 var forecastDisplay = $("#forecast-display");
-var buttonSection = $("#button-section")
+var buttonSection = $("#button-section");
+var storedCity = JSON.parse(localStorage.getItem("city")) || [];
+
+if(storedCity.length > 10) {
+    storedCity.shift();
+}
 
 submitBtn.on("click", function(e) {
     e.preventDefault();
@@ -17,13 +22,17 @@ submitBtn.on("click", function(e) {
     var apiWeatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityInput + "&appid=7ca09bdacd044c4e45bfed7a72a9b8df&units=imperial";
     var apiForecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityInput + "&appid=7ca09bdacd044c4e45bfed7a72a9b8df&units=imperial"
     fetchApi(apiWeatherUrl, apiForecastUrl);
+    inputEl.val("");
+    if (storedCity.includes(cityInput) || cityInput === "") {
+        return;
+    }
     var saveBtn = $("<btn class='save-btn button submit-btn'>");
     saveBtn.text(cityInput);
-    saveBtn.val(cityInput)
+    saveBtn.val(cityInput);
     buttonSection.append(saveBtn);
-    inputEl.val("");
+    storedCity.push(cityInput);
+    localStorage.setItem("city", JSON.stringify(storedCity));
 });
-
 
 //Create button dynamically after submitBtn is submitted
 buttonSection.on("click", ".save-btn", function(e) {
@@ -97,6 +106,19 @@ function displayForecast(data2) {
         }
     }
 }
+
+function init(storedCity) {
+    if (storedCity !== null) {
+        for(var i = 0; i < storedCity.length; i++) {
+            var saveBtn = $("<btn class='save-btn button submit-btn'>");
+            saveBtn.text([storedCity[i]]);
+            saveBtn.val(storedCity[i]);
+            buttonSection.append(saveBtn);
+        }
+    }
+};
+
+init(storedCity);
 
 
 // Original version of onClicks without fetchApi as a function
