@@ -48,7 +48,7 @@ function fetchApi(apiWeatherUrl, apiForecastUrl) {
         if(response1.ok) {
             response1.json()
             .then(function(data1) {
-
+                console.log(data1);
                 displayWeather(data1);
             })
         } else {
